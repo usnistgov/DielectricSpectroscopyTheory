@@ -1,0 +1,86 @@
+variable           T index   298.15 
+variable           P index 1
+label             START
+variable Q equal 0.7*$T
+log log.spce.$T.$P
+
+units           real
+atom_style      full
+
+read_data       acetonitrile.input
+
+group c1 type  1
+group c2 type  2
+group h type  3 
+group n type  4
+
+
+set type 1 charge  0.305
+set type 2 charge  0.182
+set type 3 charge -0.004
+set type 4 charge -0.475
+
+special_bonds amber
+pair_style      lj/long/coul/long long long 12.0
+
+
+pair_coeff    4 4  0.133188  3.100  # nitrogen, epsN   0.55726/4.184 kcal/mol 
+pair_coeff    3 3  0.004780  2.530 # H, epsH   0.02000/4.184 kcal/mol
+pair_coeff    1 1  0.1341    3.546 # 1.99/2^(1/6)*2   # cant find a c1 in the paper, so using Nikitin and Lyubartsev• Vol. 28, No. 12 • Journal of Computational Chemistry
+pair_coeff    2 2  0.1094    3.400 # 1.908/2^(1/6)*2   # cant find a c2 in the paper, so using Amber one from Nikitin and Lyubartsev
+
+kspace_style  pppm/disp  1.0e-6
+kspace_modify force/disp/real   0.0001
+kspace_modify force/disp/kspace 0.002
+kspace_modify mix/disp geom
+
+bond_style	harmonic
+angle_style	harmonic
+dihedral_style	none  # paper doesn't have one
+improper_style	none
+
+bond_coeff   1 380.60   1.457 # c1c2 318487 kJ/mol/nm^2 is 318487/4.184/100/2  = 380.60 kcal/mol/Ang^2
+bond_coeff   2 1197.93  1.170 # c1N  1002430/4.184/100/2 1197.93
+bond_coeff   3 398.49  1.087 # c2h  333460/4.184/100/2 398.49
+
+angle_coeff 1 55.52   109.9
+angle_coeff 2 22.478    180.0
+angle_coeff 3 48.936   109.0
+
+
+pair_modify mix arithmetic  # paper says "standard L-B", which is arithmetic in LAMMPS
+
+special_bonds   lj/coul 1.0e-100 1.0e-100 1.0
+
+neighbor        2.0 bin
+timestep        2
+neigh_modify    every 1 delay 2 check yes
+
+velocity all create $Q 6244333
+fix 11 all npt temp $T $T 1000 iso $P $P 1000
+thermo 10000
+thermo_style custom step lx ly lz pe etotal press vol pxx pyy pzz temp density
+run 1000000
+
+unfix 11
+
+reset_timestep 0
+fix 11 all nvt temp $T $T 100
+
+compute cc1 all chunk/atom bin/sphere 30.0 30.0 30.0 0 30 1 discard no nchunk once 
+compute myChunk all dipole/chunk cc1
+fix 12 all ave/time 1 1 1 c_myChunk[*] file OUTPUT mode vector
+thermo 10000
+thermo_style custom step lx ly lz pe etotal press vol pxx pyy pzz temp density
+
+thermo 1000
+
+variable oscillate equal 0.01*sin(2*pi*step*(2*10^-15)*(10*10^9))  #### 0.01 is the Electric field in V/Å, 2*10^-15 is the time step in s and 10*10^9 is our frequency of 10 GHz
+ fix         kick all efield 0.0 0.0 v_oscillate
+
+
+run 25000000
+clear
+next T P 
+jump in.spce START
+
