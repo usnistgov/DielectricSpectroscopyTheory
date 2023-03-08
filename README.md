@@ -4,6 +4,8 @@ Within this directory are the tools required to reproduce the work performed in 
 
 To cite this code, please cite our paper, listed above.
 
+This work is part of the project, "Measuring Intermolecular Interactions with Electro-Acoustic Spectroscopy" at NIST, https://www.nist.gov/programs-projects/measuring-intermolecular-interactions-electro-acoustic-spectroscopy
+
 Contact information:
 
   - Michael Woodcox, Materials Science and Engineering Division, Material Measurement Laboratory, National Institute of Standards and Technology, michael.woodcox@nist.gov
