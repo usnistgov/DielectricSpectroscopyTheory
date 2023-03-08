@@ -8,7 +8,7 @@ Contact information:
 
   - Michael Woodcox, Materials Science and Engineering Division, Material Measurement Laboratory, National Institute of Standards and Technology, michael.woodcox@nist.gov
   - Kathleen Schwarz, Materials Science and Engineering Division, Material Measurement Laboratory, National Institute of Standards and Technology, kathleen.schwarz@nist.gov
-  - Ravishankar Sundararaman, sundar@rpi.edu
+  - Ravishankar Sundararaman, Rensselaer Polytechnic Institute, sundar@rpi.edu
 
 
 Folder contents:
