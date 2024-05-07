@@ -16,7 +16,7 @@ Contact information:
 Folder contents:
 
 The Matlab script titled "Main.m" can be used to calculate the coefficients of the polarization density for a sample water simulation. This sample output is located at Water\OUTPUT
-The files "ReadFile.m" and "DirectFit.m" are used within this script to properly read in the data, and to successfully fir the parameters.
+The files "ReadFile.m" and "DirectFit.m" are used within this script to properly read in the data, and to successfully fit the parameters.
 
 The directories titled "Water" and "Acetonitrile" contain the input files necessary to replicate our results. The *.lammps files contain the necessary LAMMPS input parameters, and the *.input files contain the structural information of the fluid.
 
